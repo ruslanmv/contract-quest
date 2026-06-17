@@ -1,7 +1,7 @@
 import Phaser from "phaser";
 import { GAME } from "../utils/constants";
 
-/** Fixed-to-camera arcade HUD: title, coins, score, lives, RMD badge. */
+/** Fixed-to-camera arcade HUD with icon art: title, coins, score, lives, RMD badge. */
 export default class HUD {
   private coinsText: Phaser.GameObjects.Text;
   private scoreText: Phaser.GameObjects.Text;
@@ -10,25 +10,42 @@ export default class HUD {
   constructor(scene: Phaser.Scene) {
     const style: Phaser.Types.GameObjects.Text.TextStyle = {
       fontFamily: "ui-monospace, monospace",
-      fontSize: "14px",
+      fontSize: "13px",
       color: "#ffffff",
     };
-    const bar = scene.add.rectangle(GAME.WIDTH / 2, 16, GAME.WIDTH, 32, 0x14110a, 0.85);
-    const title = scene.add.text(10, 8, "CONTRACT", { ...style, color: "#ffffff", fontStyle: "bold" });
-    const title2 = scene.add.text(10 + title.width + 2, 8, "QUEST", { ...style, color: "#ffa500", fontStyle: "bold" });
-    this.coinsText = scene.add.text(175, 8, "COINS 000", style);
-    this.scoreText = scene.add.text(300, 8, "SCORE 000000", style);
-    this.livesText = scene.add.text(445, 8, "LIVES 3", style);
-    const rmd = scene.add.text(GAME.WIDTH - 95, 8, "RMD", { ...style, color: "#7fb0ff" });
+    const objs: Phaser.GameObjects.GameObject[] = [];
+    objs.push(scene.add.rectangle(GAME.WIDTH / 2, 15, GAME.WIDTH, 30, 0x14110a, 0.9));
+    objs.push(scene.add.rectangle(GAME.WIDTH / 2, 30, GAME.WIDTH, 1, 0x7fd0ff, 0.4));
 
-    [bar, title, title2, this.coinsText, this.scoreText, this.livesText, rmd].forEach((o) =>
-      o.setScrollFactor(0).setDepth(1000)
-    );
+    objs.push(scene.add.image(14, 15, "icon_robot").setScale(1.1));
+    const t1 = scene.add.text(26, 7, "CONTRACT", { ...style, fontStyle: "bold" });
+    const t2 = scene.add.text(26 + t1.width + 2, 7, "QUEST", { ...style, color: "#ffa500", fontStyle: "bold" });
+    objs.push(t1, t2);
+
+    objs.push(scene.add.image(190, 15, "icon_coin"));
+    this.coinsText = scene.add.text(202, 7, "000", style);
+    objs.push(this.coinsText);
+
+    objs.push(scene.add.text(300, 7, "SCORE", { ...style, color: "#caa37a" }));
+    this.scoreText = scene.add.text(352, 7, "000000", { ...style, color: "#ffcf33" });
+    objs.push(this.scoreText);
+
+    objs.push(scene.add.image(465, 15, "icon_robot"));
+    this.livesText = scene.add.text(477, 7, "x3", style);
+    objs.push(this.livesText);
+
+    objs.push(scene.add.text(GAME.WIDTH - 110, 7, "RMD LOCKED", { ...style, color: "#7fb0ff" }));
+    objs.push(scene.add.image(GAME.WIDTH - 14, 15, "icon_lock"));
+
+    objs.forEach((o) => {
+      (o as any).setScrollFactor(0);
+      (o as any).setDepth(1000);
+    });
   }
 
   update(coins: number, score: number, lives: number): void {
-    this.coinsText.setText("COINS " + String(coins).padStart(3, "0"));
-    this.scoreText.setText("SCORE " + String(score).padStart(6, "0"));
-    this.livesText.setText("LIVES " + lives);
+    this.coinsText.setText(String(coins).padStart(3, "0"));
+    this.scoreText.setText(String(score).padStart(6, "0"));
+    this.livesText.setText("x" + Math.max(0, lives));
   }
 }

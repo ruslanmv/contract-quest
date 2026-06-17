@@ -11,6 +11,25 @@ GitHub Pages. Governed by **Matrix Builder** contracts and the **Ruslan Magana D
 
 ---
 
+## 🎨 Enhanced visuals (this `enhanced-art` branch)
+
+This branch upgrades the look toward the concept art with an **original pixel-art asset set** +
+the production engine pipeline:
+
+- `scripts/gen_assets.py` (PIL) generates **all 20 assets** into `public/assets/` — hero sprite
+  sheet, Bug Bot, Prompt Slime, mossy/metal tiles, coin, RMD star, Matrix Gate, flag, parallax
+  sky + two city skyline layers, glow, vignette, embers, HUD icons. *(Original art — no
+  copyrighted assets.)*
+- `PreloadScene` loads them + builds hero animations (idle / run / jump).
+- `GameScene` renders **3 parallax layers**, animated hero, glowing collectibles (additive
+  bloom), ember particles, a warm color-grade + vignette, contract panels, and an **icon HUD**.
+
+Regenerate the art with `python3 scripts/gen_assets.py`. To reach the *exact* concept look,
+replace the PNGs in `public/assets/` using an image model — see
+[`docs/ASSET_PROMPTS.md`](docs/ASSET_PROMPTS.md) (same names/sizes → zero code changes).
+
+---
+
 ## ✅ Verified to build & run
 
 This scaffold was verified locally:

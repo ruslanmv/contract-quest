@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import { GAME } from "./utils/constants";
 import BootScene from "./scenes/BootScene";
+import PreloadScene from "./scenes/PreloadScene";
 import GameScene from "./scenes/GameScene";
 
 const config: Phaser.Types.Core.GameConfig = {
@@ -18,7 +19,7 @@ const config: Phaser.Types.Core.GameConfig = {
     default: "arcade",
     arcade: { gravity: { x: 0, y: GAME.GRAVITY }, debug: false },
   },
-  scene: [BootScene, GameScene],
+  scene: [BootScene, PreloadScene, GameScene],
 };
 
 // eslint-disable-next-line no-new
