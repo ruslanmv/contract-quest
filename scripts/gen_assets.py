@@ -237,9 +237,49 @@ def icons():
     icon("icon_coin.png", coin_i); icon("icon_robot.png", robot_i)
     icon("icon_lock.png", lock_i); icon("icon_shield.png", shield_i); icon("icon_jump.png", jump_i)
 
+def gate_swirl():
+    s = 80; im = img(s, s); d = ImageDraw.Draw(im); cx = cy = 40
+    for k in range(3):
+        for t in range(0, 360, 5):
+            a = math.radians(t + k * 120); r = 4 + t / 360 * 34
+            x = cx + math.cos(a) * r; y = cy + math.sin(a) * r
+            col = (170, 215, 255, 200) if k % 2 == 0 else (255, 255, 255, 170)
+            d.ellipse([x - 2, y - 2, x + 2, y + 2], fill=col)
+    save(im, "gate_swirl.png")
+
+def coin_spin():
+    fw, fh, n = 16, 16, 4; im = img(fw * n, fh); widths = [14, 9, 3, 9]
+    for f in range(n):
+        d = ImageDraw.Draw(im); ox = f * fw; w = widths[f]
+        d.ellipse([ox + 8 - w // 2, 1, ox + 8 + w // 2, 15], fill=(255, 207, 51, 255), outline=OUTLINE)
+        if w > 5:
+            d.ellipse([ox + 8 - w // 2 + 1, 3, ox + 8 + w // 2 - 1, 13], outline=(255, 242, 168, 255))
+    save(im, "coin_spin.png")
+
+def lantern():
+    w, h = 12, 20; im = img(w, h); d = ImageDraw.Draw(im)
+    d.line([(6, 0), (6, 4)], fill=OUTLINE)
+    d.rounded_rectangle([2, 4, 10, 16], 2, fill=(60, 52, 40, 255), outline=OUTLINE)
+    d.rectangle([4, 6, 8, 14], fill=(255, 200, 110, 255))
+    save(im, "lantern.png")
+
+def plant():
+    w, h = 18, 14; im = img(w, h); d = ImageDraw.Draw(im)
+    for bx in (4, 9, 14):
+        d.polygon([(bx, 14), (bx - 3, 5), (bx, 0), (bx + 3, 5)], fill=(63, 125, 51, 255), outline=(40, 90, 40, 255))
+    save(im, "plant.png")
+
+def ray():
+    w, h = 200, 16; im = img(w, h); d = ImageDraw.Draw(im)
+    for x in range(w):
+        a = int(70 * (1 - x / w))
+        d.line([(x, 0), (x, h)], fill=(255, 220, 150, a))
+    save(im, "ray.png")
+
 print("Generating assets ->", os.path.abspath(OUT))
 sky()
 city("city_far.png", (58, 42, 51), 150, False, 0, 90, 200, w=960, h=300)
 city("city_near.png", (74, 56, 66), 210, True, 0, 130, 240, w=960, h=300)
-ground(); metal(); hero(); bug(); slime(); coin(); star(); gate(); flag(); glow(); vignette(); ember(); icons()
+ground(); metal(); hero(); bug(); slime(); coin(); coin_spin(); star(); gate(); gate_swirl(); flag()
+glow(); vignette(); ember(); ray(); lantern(); plant(); icons()
 print("done.")

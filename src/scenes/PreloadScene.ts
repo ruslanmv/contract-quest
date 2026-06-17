@@ -26,7 +26,12 @@ export default class PreloadScene extends Phaser.Scene {
     this.load.image("coin", "assets/coin.png");
     this.load.image("rmd", "assets/rmd.png");
     this.load.image("gate", "assets/gate.png");
+    this.load.image("gateSwirl", "assets/gate_swirl.png");
     this.load.image("flag", "assets/flag.png");
+    this.load.image("lantern", "assets/lantern.png");
+    this.load.image("plant", "assets/plant.png");
+    this.load.image("ray", "assets/ray.png");
+    this.load.spritesheet("coinspin", "assets/coin_spin.png", { frameWidth: 16, frameHeight: 16 });
     this.load.image("glow", "assets/glow.png");
     this.load.image("vignette", "assets/vignette.png");
     this.load.image("ember", "assets/ember.png");
@@ -45,6 +50,12 @@ export default class PreloadScene extends Phaser.Scene {
       repeat: -1,
     });
     this.anims.create({ key: "jump", frames: [{ key: "hero", frame: 3 }], frameRate: 1 });
+    this.anims.create({
+      key: "coinspin",
+      frames: this.anims.generateFrameNumbers("coinspin", { start: 0, end: 3 }),
+      frameRate: 10,
+      repeat: -1,
+    });
     this.scene.start("Game");
   }
 }

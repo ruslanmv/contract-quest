@@ -40,6 +40,7 @@ export default class GameScene extends Phaser.Scene {
     this.cameras.main.startFollow(this.player, true, 0.1, 0.1);
 
     this.spawnEntities();
+    this.decor();
     this.ambientFX();
 
     this.hud = new HUD(this);
@@ -114,10 +115,41 @@ export default class GameScene extends Phaser.Scene {
     this.physics.add.collider(slime, this.platforms);
     this.physics.add.overlap(this.player, slime, () => this.onEnemy(slime));
 
-    // Matrix Gate
-    this.glow(LEVEL_WIDTH - 70, GAME.HEIGHT - 130, 2.4, 0x1f6fff);
-    const gate = this.physics.add.staticImage(LEVEL_WIDTH - 70, GAME.HEIGHT - 130, "gate");
+    // Matrix Gate (animated portal)
+    const gx = LEVEL_WIDTH - 70, gy = GAME.HEIGHT - 130;
+    const gGlow = this.glow(gx, gy, 2.4, 0x1f6fff);
+    this.tweens.add({ targets: gGlow, scale: 3, alpha: 0.5, duration: 1100, yoyo: true, repeat: -1 });
+    const gate = this.physics.add.staticImage(gx, gy, "gate");
+    const swirl = this.add.image(gx, gy - 12, "gateSwirl").setBlendMode(Phaser.BlendModes.ADD).setDepth(-1);
+    this.tweens.add({ targets: swirl, angle: 360, duration: 7000, repeat: -1 });
     this.physics.add.overlap(this.player, gate, () => this.onGate());
+  }
+
+  /** Atmospheric decor: sun light-rays, glowing lanterns, foliage. */
+  private decor(): void {
+    // sun light-rays (fixed to screen, slow sway)
+    const sx = GAME.WIDTH * 0.66, sy = 205;
+    for (let i = 0; i < 6; i++) {
+      const ray = this.add
+        .image(sx, sy, "ray")
+        .setOrigin(0, 0.5)
+        .setBlendMode(Phaser.BlendModes.ADD)
+        .setScrollFactor(0)
+        .setDepth(-15)
+        .setAlpha(0.35)
+        .setScale(2.2, 1)
+        .setAngle(-90 + i * 30);
+      this.tweens.add({ targets: ray, angle: ray.angle + 4, duration: 4000 + i * 300, yoyo: true, repeat: -1, ease: "Sine.inOut" });
+    }
+    // lanterns (warm glow) on platforms
+    for (const [lx, ly] of [[300, 250], [880, 220], [1290, 230], [1980, 240]]) {
+      this.glow(lx, ly - 16, 0.7, 0xffb060).setDepth(-2);
+      this.add.image(lx, ly - 18, "lantern").setDepth(-2);
+    }
+    // foliage tufts along ledges + ground
+    for (const [px, py] of [[360, 234], [820, 234], [1330, 214], [200, GAME.HEIGHT - 64], [1500, GAME.HEIGHT - 64], [2200, GAME.HEIGHT - 64]]) {
+      this.add.image(px, py, "plant").setDepth(-3);
+    }
   }
 
   private ambientFX(): void {
