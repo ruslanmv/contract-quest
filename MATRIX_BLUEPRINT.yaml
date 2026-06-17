@@ -1,0 +1,13 @@
+project: contract-quest
+name: Contract Quest
+version: v1.0.0
+provider_rule: watsonx-only        # AI coding assistance uses watsonx only; runtime calls none
+stack:
+  language: TypeScript
+  bundler: Vite
+  engine: Phaser 3
+  deploy: GitHub Pages (static)
+governance:
+  definitions: Ruslan Magana Definitions (RMD)
+  rules: [RMD-101, RMD-103, RMD-111]
+allowed_change_roots: [src/, public/, docs/]
