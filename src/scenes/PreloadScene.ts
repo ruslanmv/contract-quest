@@ -56,6 +56,6 @@ export default class PreloadScene extends Phaser.Scene {
       frameRate: 10,
       repeat: -1,
     });
-    this.scene.start("Game");
+    this.scene.start("Title");
   }
 }
