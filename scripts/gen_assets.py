@@ -248,7 +248,7 @@ def gate_swirl():
     save(im, "gate_swirl.png")
 
 def coin_spin():
-    fw, fh, n = 16, 16, 4; im = img(fw * n, fh); widths = [14, 9, 3, 9]
+    fw, fh, n = 16, 16, 4; im = img(fw * n, fh); widths = [14, 11, 7, 11]
     for f in range(n):
         d = ImageDraw.Draw(im); ox = f * fw; w = widths[f]
         d.ellipse([ox + 8 - w // 2, 1, ox + 8 + w // 2, 15], fill=(255, 207, 51, 255), outline=OUTLINE)

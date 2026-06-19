@@ -2,7 +2,11 @@ import Phaser from "phaser";
 import { GAME } from "./utils/constants";
 import BootScene from "./scenes/BootScene";
 import PreloadScene from "./scenes/PreloadScene";
+import TitleScene from "./scenes/TitleScene";
+import StoryScene from "./scenes/StoryScene";
 import GameScene from "./scenes/GameScene";
+import VictoryScene from "./scenes/VictoryScene";
+import CreditsScene from "./scenes/CreditsScene";
 
 const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
@@ -19,7 +23,7 @@ const config: Phaser.Types.Core.GameConfig = {
     default: "arcade",
     arcade: { gravity: { x: 0, y: GAME.GRAVITY }, debug: false },
   },
-  scene: [BootScene, PreloadScene, GameScene],
+  scene: [BootScene, PreloadScene, TitleScene, StoryScene, GameScene, VictoryScene, CreditsScene],
 };
 
 // eslint-disable-next-line no-new
