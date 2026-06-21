@@ -133,8 +133,7 @@ npm run preview -- --host 0.0.0.0
 Open the preview URL and verify the title screen loads, controls respond, and assets render.
 
 > **GitHub Pages base:** Vercel uses `/` by default. GitHub Pages still needs `VITE_BASE=/contract-quest/`;
-> the included GitHub Actions workflow sets that environment variable during its Pages build. If Pages is
-> not enabled in repository settings, the workflow still verifies the build and skips only the Pages deploy step.
+> the included GitHub Actions workflow sets that environment variable during its Pages build.
 
 ## Reproduce it locally
 
