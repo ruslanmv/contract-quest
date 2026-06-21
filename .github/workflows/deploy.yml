@@ -14,7 +14,9 @@ jobs:
         with: { node-version: "lts/*", cache: "npm" }
       - run: npm ci
       - run: npm run typecheck
-      - run: npm run build          # base = /contract-quest/ (vite.config.ts)
+      - run: npm run build
+        env:
+          VITE_BASE: /contract-quest/
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with: { path: ./dist }

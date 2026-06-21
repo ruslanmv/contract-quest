@@ -1,9 +1,9 @@
 import { defineConfig } from "vite";
 
-// base must match the GitHub Pages repo path for asset URLs to resolve.
-// For https://<user>.github.io/contract-quest/ set base to "/contract-quest/".
+// Vercel serves the game from the domain root, so the default base is "/".
+// GitHub Pages can still set VITE_BASE=/contract-quest/ in its workflow.
 export default defineConfig({
-  base: process.env.VITE_BASE ?? "/contract-quest/",
+  base: process.env.VITE_BASE ?? "/",
   build: { target: "es2020", outDir: "dist", sourcemap: false },
   server: { host: true, port: 5173 },
 });
