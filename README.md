@@ -3,7 +3,7 @@
 <h1>🛡️ Contract Quest</h1>
 <h3>An 8-episode governed arcade quest — <b>Phaser 3 · TypeScript · Vite</b></h3>
 
-<p>A real, buildable game engine (not a single HTML file): static, client-side, deployable to GitHub
+<p>A real, buildable game engine (not a single HTML file): static, client-side, deployable to Vercel or GitHub
 Pages. A <b>Super Mario Bros-style 8-episode campaign</b> with story, power-ups, a boss and end
 credits — grown <b>without ever rewriting the engine</b>. Governed by <a href="https://github.com/agent-matrix/matrix-builder">Matrix Builder</a>
 contracts and the <b>Ruslan Magana Definitions (RMD)</b>.</p>
@@ -100,6 +100,42 @@ It runs immediately with **original pixel-art** generated programmatically — h
 Bot, Prompt Slime, mossy/metal tiles, round Contract Coins, RMD Star, Matrix Gate, parallax sky +
 two city skylines, glow, vignette, embers, HUD icons. *(All original art — no copyrighted assets.)*
 
+## Deploy on Vercel
+
+This game is already a static Vite app: Phaser runs entirely in the browser, assets live under
+`public/assets/`, and there is no backend or secret runtime configuration. The Vercel-ready setup is:
+
+- `vercel.json` tells Vercel to install with `npm ci`, run `npm run vercel-build`, and publish `dist/`.
+- `npm run vercel-build` runs `npm run typecheck` before `npm run build`, so a broken TypeScript build does not deploy.
+- `vite.config.ts` defaults to `base: "/"`, which is the correct asset base for a Vercel project domain or custom domain.
+- A catch-all rewrite serves `index.html`, keeping the deployment safe if future scene URLs or routes are added.
+- `/assets/*` receives long-lived immutable caching because filenames in `public/assets/` are versioned by repository changes.
+
+### One-time Vercel setup
+
+1. Push this repository to GitHub, GitLab, or Bitbucket.
+2. In Vercel, choose **Add New → Project**, import the repository, and keep the detected **Vite** framework preset.
+3. Confirm these settings, which are also encoded in `vercel.json`:
+   - **Install Command:** `npm ci`
+   - **Build Command:** `npm run vercel-build`
+   - **Output Directory:** `dist`
+4. Deploy. Vercel will provide a public HTTPS URL that anyone can open to play the game.
+5. Optional: attach a custom domain in Vercel Project Settings → Domains. No code changes are needed for root-domain hosting.
+
+### Local production check
+
+```bash
+npm ci
+npm run vercel-build
+npm run preview -- --host 0.0.0.0
+```
+
+Open the preview URL and verify the title screen loads, controls respond, and assets render.
+
+> **GitHub Pages base:** Vercel uses `/` by default. GitHub Pages still needs `VITE_BASE=/contract-quest/`;
+> the included GitHub Actions workflow sets that environment variable during its Pages build. If Pages is
+> not enabled in repository settings, the workflow still verifies the build and skips only the Pages deploy step.
+
 ## Reproduce it locally
 
 ```bash
@@ -112,15 +148,16 @@ npm run build && npm run preview
 python3 scripts/gen_assets.py   # regenerate the original pixel-art set
 ```
 
-> **GitHub Pages base:** set `base` in `vite.config.ts` (or the `VITE_BASE` env) to `/<your-repo>/`
-> so asset URLs resolve. Default is `/contract-quest/`.
+> **Deployment base:** Vercel works with the default `/` base. For GitHub Pages, set `VITE_BASE`
+> to `/<your-repo>/` so asset URLs resolve; the included Pages workflow uses `/contract-quest/`.
 
 ## Architecture
 
 ```
 contract-quest/
 ├── index.html                 # canvas mount + footer credit
-├── vite.config.ts             # base path for GitHub Pages
+├── vite.config.ts             # deployment base path (Vercel root by default)
+├── vercel.json                # Vercel build/output/SPA routing configuration
 ├── src/
 │   ├── main.ts                # Phaser config (pixelArt, Arcade physics, FIT scale)
 │   ├── scenes/
@@ -164,7 +201,7 @@ Full design (data models, asset pipeline, batch plan) is in
 
 ## Tech stack
 
-**TypeScript** · **Vite 5** · **Phaser 3** · Arcade physics · ESLint/Prettier · GitHub Actions →
+**TypeScript** · **Vite 5** · **Phaser 3** · Arcade physics · ESLint/Prettier · Vercel · GitHub Actions →
 Pages. No backend, no runtime AI calls. AI is used only to *assist writing code*. No API keys are
 committed.
 
